@@ -53,11 +53,15 @@ if ingredients_list:
     """
 
     st.success(f"✅ Your Smoothie is ordered, {name_on_order}!")
+
+    # ✅ Move this block ABOVE st.stop()
     time_to_insert = st.button('Submit Order')
 
-if time_to_insert:
-    session.sql(my_insert_stmt).collect()
-    st.success('Your Smoothie is ordered!', icon="✅")
+    if time_to_insert:
+        session.sql(my_insert_stmt).collect()
+        st.success('Your Smoothie is ordered!', icon="✅")
 
-st.write(my_insert_stmt)
-st.stop()
+    st.write(my_insert_stmt)
+
+    # ⛔️ This must come AFTER the button logic
+    st.stop()
