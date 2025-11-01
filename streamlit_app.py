@@ -57,10 +57,9 @@ if ingredients_list:
     combined_value = ingredients_string + " (" + name_on_order + ")"
 
     my_insert_stmt = f"""
-       #INSERT INTO smoothies.public.orders(ingredients)
-    #VALUES ('{combined_value}')
-           INSERT INTO smoothies.public.orders (NAME_ON_ORDER, INGREDIENTS, ORDER_FILLED, ORDER_TS)
-           VALUES ('{name_on_order}', '{ingredients_string}', {str(order_filled).upper()}, CURRENT_TIMESTAMP)
+       INSERT INTO smoothies.public.orders(ingredients)
+    VALUES ('{combined_value}')
+           
     """
 
     st.success(f"✅ Your Smoothie is ordered, {name_on_order}!")
