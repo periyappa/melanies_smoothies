@@ -38,7 +38,6 @@ ingredients_list = st.multiselect(
     max_selections=5
 )
 order_filled = st.checkbox("Mark order as FILLED")
-
 # If user selects ingredients
 if ingredients_list:
     ingredients_string = ''
@@ -55,11 +54,15 @@ if ingredients_list:
 
     combined_value = ingredients_string.strip()
 
+    
+    order_filled_sql = "TRUE" if order_filled else "FALSE"
+
     # SQL insert statement
     my_insert_stmt = f"""
-    INSERT INTO smoothies.public.orders(name_on_order, ingredients)
-    VALUES ('{name_on_order}', '{ingredients_string.strip()}', {str(order_filled).upper()})
+        INSERT INTO smoothies.public.orders (name_on_order, ingredients, order_filled)
+        VALUES ('{name_on_order}', '{ingredients_string}', {order_filled_sql})
     """
+
 
 
     time_to_insert = st.button('Submit Order')
