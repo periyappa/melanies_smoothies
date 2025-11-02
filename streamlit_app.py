@@ -36,9 +36,9 @@ if ingredients_list:
     ingredients_string = ''
     for fruit_chosen in ingredients_list:
         ingredients_string += fruit_chosen + ' '
-
+        st.subheader(fruit_chosen + 'Nutrition Information')
         # Fetch smoothie fruit data for each chosen fruit
-        smoothiefroot_response = requests.get(f"https://my.smoothiefroot.com/api/fruit/watermelon")
+        smoothiefroot_response = requests.get(f"https://my.smoothiefroot.com/api/fruit/" + fruit_chosen)
         sf_df = st.dataframe(data=smoothiefroot_response.json(), use_container_width=True)
 
     combined_value = ingredients_string + " (" + name_on_order + ")"
