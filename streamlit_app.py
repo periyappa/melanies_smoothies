@@ -1,7 +1,7 @@
 # Import python packages
 import streamlit as st
 from snowflake.snowpark.functions import col
-import requests  # Moved to top for clarity
+import requests  # ✅ Added for API call
 
 # Write directly to the app
 st.title(f"Example Streamlit App :balloon: {st.__version__}")
@@ -39,8 +39,10 @@ if ingredients_list:
         VALUES ('{combined_value}')
     """
 
+    # ✅ New section to display smoothiefroot nutrition information
     smoothiefroot_response = requests.get("https://my.smoothiefroot.com/api/fruit/watermelon")
-    st.text(smoothiefroot_response.json())
+    # st.text(smoothiefroot_response.json())
+    sf_df = st.dataframe(smoothiefroot_response.json(), use_container_width=True)
 
     st.success(f"✅ Your Smoothie is ordered, {name_on_order}!")
     st.write(my_insert_stmt)
