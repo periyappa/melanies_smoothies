@@ -1,7 +1,7 @@
 import streamlit as st
 import requests
 
-# Existing smoothie customization app
+# Smoothie Customization App
 st.title("🥤 Customize Your Smoothie!")
 
 name_on_smoothie = st.text_input("Name on Smoothie:")
@@ -18,8 +18,10 @@ if st.button("Submit Order"):
     else:
         st.warning("Please enter a name for your smoothie!")
 
-# 🆕 New section to display SmoothieFroot nutrition information
-# (Updated per task instructions)
-import requests
-smoothiefroot_response = requests.get("https://my.smoothiefroot.com/api/fruit/watermelon")
-sf_df = st.dataframe(data=smoothiefroot_response.json(), use_container_width=True)
+# Display nutrition info for selected fruits
+if ingredients_list:
+    ingredients_string = ''
+    for fruit_chosen in ingredients_list:
+        ingredients_string += fruit_chosen + ' '
+        smoothiefroot_response = requests.get(f"https://my.smoothiefroot.com/api/fruit/{fruit_chosen.lower()}")
+        sf_df = st.dataframe(data=smoothiefroot_response.json(), use_container_width=True)
