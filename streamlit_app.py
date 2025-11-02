@@ -1,7 +1,7 @@
 # Import python packages
 import streamlit as st
 from snowflake.snowpark.functions import col
-import requests  # ✅ Added for API call
+import requests  # ✅ Moved to top with other imports
 
 # Write directly to the app
 st.title(f"Example Streamlit App :balloon: {st.__version__}")
@@ -28,21 +28,20 @@ ingredients_list = st.multiselect(
 )
 
 if ingredients_list:
-    ingredients_string = ''
+    ingredients_string = ""
     for fruit_chosen in ingredients_list:
-        ingredients_string += fruit_chosen + ' '
+        ingredients_string += fruit_chosen + ","
 
-    combined_value = ingredients_string.strip() + " (" + name_on_order + ")"
+        # ✅ Moved inside the loop for each fruit
+        smoothiefroot_response = requests.get("https://my.smoothiefroot.com/api/fruit/watermelon")
+        sf_df = st.dataframe(data=smoothiefroot_response.json())
+
+    combined_value = ingredients_string.strip(",") + " (" + name_on_order + ")"
 
     my_insert_stmt = f"""
         INSERT INTO smoothies.public.orders(ingredients)
         VALUES ('{combined_value}')
     """
-
-    # ✅ New section to display smoothiefroot nutrition information
-    smoothiefroot_response = requests.get("https://my.smoothiefroot.com/api/fruit/watermelon")
-    # st.text(smoothiefroot_response.json())
-    sf_df = st.dataframe(smoothiefroot_response.json(), use_container_width=True)
 
     st.success(f"✅ Your Smoothie is ordered, {name_on_order}!")
     st.write(my_insert_stmt)
