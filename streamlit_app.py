@@ -16,14 +16,25 @@ st.write(
 name_on_order = st.text_input('Name on Smoothie:')
 st.write('The name on your Smoothie will be:', name_on_order)
 
+# Connect to Snowflake
 cnx = st.connection("snowflake")
 session = cnx.session()
 
-my_dataframe = session.table("smoothies.public.fruit_options").select(col('FRUIT_NAME'))
+# ✅ Updated section per challenge task
+# Select both FRUIT_NAME and SEARCH_ON columns
+my_dataframe = session.table("smoothies.public.fruit_options").select(
+    col('FRUIT_NAME'),
+    col('SEARCH_ON')
+)
 
+# Display the dataframe temporarily for debugging (optional)
+st.dataframe(data=my_dataframe, use_container_width=True)
+st.stop()  # ✅ Added so we can focus on this part for now
+
+# Multiselect dropdown shows FRUIT_NAMEs
 ingredients_list = st.multiselect(
     'Choose up to 5 ingredients:',
-    my_dataframe,
+    my_dataframe['FRUIT_NAME'],
     max_selections=5
 )
 
@@ -32,9 +43,11 @@ if ingredients_list:
     for fruit_chosen in ingredients_list:
         ingredients_string += fruit_chosen + ", "
 
-        # ✅ Updated API endpoint per task instructions
+        # ✅ Use SEARCH_ON column for API call instead of FRUIT_NAME
+        search_value = my_dataframe.filter(col('FRUIT_NAME') == fruit_chosen).collect()[0]['SEARCH_ON']
+
         st.subheader(f"{fruit_chosen} Nutrition Information")
-        smoothiefroot_response = requests.get("https://my.smoothiefroot.com/api/fruit/" + fruit_chosen)
+        smoothiefroot_response = requests.get("https://my.smoothiefroot.com/api/fruit/" + search_value)
 
         # ✅ Handle missing fruits gracefully
         if smoothiefroot_response.status_code == 200:
