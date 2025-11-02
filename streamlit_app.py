@@ -52,13 +52,14 @@ if ingredients_list:
         smoothiefroot_response = requests.get(f"https://my.smoothiefroot.com/api/fruit/{search_on}")
         sf_df = st.dataframe(data=smoothiefroot_response.json(), use_container_width=True)
 
-    combined_value = ingredients_string + " (" + name_on_order + ")"
+    combined_value = ingredients_string.strip()
 
     # SQL insert statement
     my_insert_stmt = f"""
-        INSERT INTO smoothies.public.orders(ingredients)
-        VALUES ('{combined_value}')
+    INSERT INTO smoothies.public.orders(name_on_order, ingredients)
+    VALUES ('{name_on_order}', '{combined_value}')
     """
+
 
     time_to_insert = st.button('Submit Order')
 
