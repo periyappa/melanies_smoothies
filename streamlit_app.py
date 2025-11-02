@@ -37,8 +37,7 @@ ingredients_list = st.multiselect(
     my_dataframe,
     max_selections=5
 )
-order_filled = st.checkbox('Mark order as FILLED')
-
+order_filled = "TRUE" if st.checkbox("Mark order as FILLED") else "FALSE"
 
 # If user selects ingredients
 if ingredients_list:
