@@ -14,8 +14,8 @@ st.write(
     """
 )
 
-# Input for smoothie name
-name_on_order = st.text_input('Name on Smoothie:')
+# ✅ Default the name field to "Kevin"
+name_on_order = st.text_input('Name on Smoothie:', value="Kevin")
 st.write('The name on your Smoothie will be:', name_on_order)
 
 # Connect to Snowflake
@@ -50,7 +50,7 @@ time_to_insert = st.button('Submit Order')
 if time_to_insert:
     if ingredients_list:
         session.sql(my_insert_stmt).collect()
-        st.success('✅ Your Smoothie is ordered!', icon="✅")
+        st.success(f'✅ Your Smoothie is ordered for {name_on_order}!', icon="✅")
     else:
         st.warning("⚠️ Please select at least one fruit before submitting.")
 
